@@ -1,35 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ethers, BigNumber } from 'ethers';
 import contractNft from './contract.json';
 import { Button, Flex, Box, Text, Input} from "@chakra-ui/react";
 
-const contractAddress = "0xde031ff3Bc9798EBe8Cb408DEe012AAf110881Bf";
+const contractAddress = "0x03c8974f24b2fedf1960ab045c9e8cc268f03386";
 
-const Mainmint = ({accounts, setAccounts}) => {
+const Mainmint = ({accounts, setAccounts, totalMintCount, setTotalMintCount}) => {
     const [mintAmount, setMintAmount] = useState(1);
-    const [totalMintCount, setTotalMintCount] = useState(0);
     const isConnected = Boolean(accounts[0]);
-
-    const getTotalNFTsMintedSoFar = async () => {
-        try {
-          const { ethereum } = window;
-    
-          if (ethereum) {
-            const provider = new ethers.providers.Web3Provider(ethereum);
-            const signer = provider.getSigner();
-            const connectedContract = new ethers.Contract(
-              contractAddress,
-              contractNft,
-              signer
-            );
-    
-            let totalMinted = await connectedContract.totalSupply();
-            setTotalMintCount(totalMinted)
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
 
     async function handleMint() {
         if (window.ethereum) {
@@ -41,7 +19,13 @@ const Mainmint = ({accounts, setAccounts}) => {
                 contractNft,
                 signer
             )
-
+            
+            if (window.ethereum.networkVersion !== 1) {
+                await window.ethereum.request({
+                  method: 'wallet_switchEthereumChain',
+                  params: [{ chainId: "0x1" }]
+                });
+            }
 
             try {
                 if (mintAmount === 1) {
@@ -68,10 +52,6 @@ const Mainmint = ({accounts, setAccounts}) => {
         setMintAmount(mintAmount + 1);
     }
 
-    useEffect(() => {
-        getTotalNFTsMintedSoFar();
-      }, []);
-
     return (
         <Flex position="absolute" left="65%" top="40%">
             <Box>
@@ -83,8 +63,8 @@ const Mainmint = ({accounts, setAccounts}) => {
                     {isConnected ? (
                         <div>
                             <div>
-                                <Text fontSize="25px" textShadow="0 1px #000000" color="#FFFFFF" fontSize="40px" marginTop="10px" marginBottom="10px">
-                                    Total Mints: {Number(totalMintCount)}/ 3333
+                                <Text fontSize="25px" textShadow="0 1px #000000" color="#FFFFFF" marginTop="10px" marginBottom="10px">
+                                    Total Mints: {Number(totalMintCount)} / 3333
                                 </Text>
                             </div>
                             <div>

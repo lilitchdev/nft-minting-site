@@ -3,9 +3,13 @@ import { Button, Flex, Image, Link} from "@chakra-ui/react";
 import Twitter from "./assets/twiitter.png";
 import Etherscan from "./assets/etherscan.png";
 import Opensea from "./assets/opensea.png";
+import { ethers } from 'ethers';
+import contractNft from './contract.json';
 
+const contractAddress = "0x03c8974f24b2fedf1960ab045c9e8cc268f03386";
+const chainId = 1;
 
-const NavBar = ({accounts, setAccounts}) => {
+const NavBar = ({accounts, setAccounts, totalMintCount, setTotalMintCount}) => {
     const isConnected = Boolean(accounts[0]);
 
     async function connectAccount() {
@@ -14,8 +18,29 @@ const NavBar = ({accounts, setAccounts}) => {
                 method: "eth_requestAccounts",
             })
             setAccounts(accounts);
+
+            if (window.ethereum.networkVersion !== chainId) {
+                  await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: "0x1" }]
+                  });
+            }
+            
+
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            const connectedContract = new ethers.Contract(
+              contractAddress,
+              contractNft,
+              signer
+            );
+    
+            let totalMintCount = await connectedContract.totalSupply();
+            setTotalMintCount(totalMintCount)
+          }
+
         }
-    }
+
 
     return (
         <Flex justify="space-between" align="center" padding="25px" >
@@ -25,12 +50,12 @@ const NavBar = ({accounts, setAccounts}) => {
                 </Link>
             </Flex>
             <Flex justify="space-around" width="40%" padding="0 75px">
-                <Link href="https://rinkeby.etherscan.io/address/0xde031ff3Bc9798EBe8Cb408DEe012AAf110881Bf">
+                <Link href="https://etherscan.io/address/0x03c8974f24b2fedf1960ab045c9e8cc268f03386">
                     <Image src={Etherscan} boxSize="75px" margin="0 15px"></Image>
                 </Link>
             </Flex>
             <Flex justify="space-around" width="40%" padding="0 75px">
-                <Link href="https://testnets.opensea.io/collection/last-testing-bro">
+                <Link href="https://opensea.io/collection/gentlemenpfp">
                     <Image src={Opensea} boxSize="75px" margin="0 15px"></Image>
                 </Link>
             </Flex>
