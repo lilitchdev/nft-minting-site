@@ -3,7 +3,7 @@ import { ethers, BigNumber } from 'ethers';
 import contractNft from './contract.json';
 import { Button, Flex, Box, Text, Input} from "@chakra-ui/react";
 
-const contractAddress = "0xde031ff3Bc9798EBe8Cb408DEe012AAf110881Bf";
+const contractAddress = "0x03C8974F24B2FEDf1960AB045c9E8cc268F03386";
 
 const Mainmint = ({accounts, setAccounts}) => {
     const [mintAmount, setMintAmount] = useState(1);
