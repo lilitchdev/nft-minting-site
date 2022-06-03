@@ -25,12 +25,12 @@ const NavBar = ({accounts, setAccounts}) => {
                 </Link>
             </Flex>
             <Flex justify="space-around" width="40%" padding="0 75px">
-                <Link href="https://rinkeby.etherscan.io/address/0xde031ff3Bc9798EBe8Cb408DEe012AAf110881Bf">
+                <Link href="https://etherscan.io/address/0x03c8974f24b2fedf1960ab045c9e8cc268f03386">
                     <Image src={Etherscan} boxSize="75px" margin="0 15px"></Image>
                 </Link>
             </Flex>
             <Flex justify="space-around" width="40%" padding="0 75px">
-                <Link href="https://testnets.opensea.io/collection/last-testing-bro">
+                <Link href="https://opensea.io/collection/gentlemenpfp">
                     <Image src={Opensea} boxSize="75px" margin="0 15px"></Image>
                 </Link>
             </Flex>
